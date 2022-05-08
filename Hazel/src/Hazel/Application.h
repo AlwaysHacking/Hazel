@@ -9,33 +9,33 @@
 
 namespace Hazel {
 
-	class HAZEL_API Application
-	{
-	public: 
-		Application();
-		virtual ~Application();
+    class HAZEL_API Application
+    {
+    public:
+        Application();
+        virtual ~Application();
 
-		void Run();
+        void Run();
 
-		void OnEvent(Event& e);
-		
-		void PushLayer(Layer* layer);
-		void PushOverlay(Layer* layer);
+        void OnEvent(Event& e);
 
-		inline static Application& Get() { return *s_Instance; }
-		inline Window& GetWindow() { return *m_Window; }
+        void PushLayer(Layer* layer);
+        void PushOverlay(Layer* layer);
 
-	private:
-		bool OnWindowClose(WindowCloseEvent& e);
+        inline static Application& Get() { return *s_Instance; }
+        inline Window& GetWindow() { return *m_Window; }
 
-		std::unique_ptr<Window> m_Window;
-		bool m_Running = true;
-		LayerStack m_LayerStack;
+    private:
+        bool OnWindowClose(WindowCloseEvent& e);
 
-		static Application* s_Instance;
-	};
+        std::unique_ptr<Window> m_Window;
+        bool m_Running = true;
+        LayerStack m_LayerStack;
 
-	// To be defined in CLIENT
-	Application* CreateApplication();
+        static Application* s_Instance;
+    };
+
+    // To be defined in CLIENT
+    Application* CreateApplication();
 
 }
