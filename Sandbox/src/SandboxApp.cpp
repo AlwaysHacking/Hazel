@@ -1,5 +1,7 @@
 #include <Hazel.h>
 
+#include "imgui/imgui.h"
+
 class ExampleLayer : public Hazel::Layer
 {
 public:
@@ -17,7 +19,13 @@ public:
 	{
         
 	}
-
+    
+	virtual void OnImGuiRender() override
+	{
+		ImGui::Begin("Test");
+        ImGui::Text("Hello World!");
+        ImGui::End();
+	}
 };
 
 class Sandbox : public Hazel::Application
