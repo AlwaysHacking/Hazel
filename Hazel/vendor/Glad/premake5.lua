@@ -11,11 +11,19 @@ project "Glad"
         "include/KHR/khrplatform.h",
         "src/glad.c"
     }
-
+    
     includedirs
     {
-        "include"
+        "include/",
+        "src/"
     }
+    
+    
+    filter "system:macosx"
+        sysincludedirs {
+            "include/",
+            "src/"
+        }
 
     filter "system:windows"
         systemversion "latest"

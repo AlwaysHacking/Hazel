@@ -32,9 +32,6 @@ project "Hazel"
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-    pchheader "hzpch.h"
-    pchsource "Hazel/src/hzpch.cpp"
-
     files
     {
         "%{prj.name}/src/**.h",
@@ -58,18 +55,12 @@ project "Hazel"
         "%{IncludeDir.glm}"
     }
 
-    links
-    {
-        "GLFW",
-        "Glad",
-        "ImGui",
-        "opengl32.lib"
-    }
-
     filter "system:windows"
-        cppdialect "C++17"
         staticruntime "On"
         systemversion "latest"
+        
+        pchheader "hzpch.h"
+        pchsource "Hazel/src/hzpch.cpp"
 
         defines
         {
@@ -81,6 +72,43 @@ project "Hazel"
         postbuildcommands
         {
             ("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
+        }
+
+        links
+        {
+            "GLFW",
+            "Glad",
+            "ImGui",
+            "opengl32.lib"
+        }
+
+    filter "system:macosx"
+        pchheader "src/hzpch.h"
+        pchsource "src/hzpch.cpp"
+
+        postbuildcommands {
+            ("cp -R %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
+        }
+
+        defines
+        {
+            "GLFW_INCLUDE_NONE"
+        }
+
+        sysincludedirs {
+            "%{IncludeDir.GLFW}",
+            "%{IncludeDir.Glad}",
+            "%{IncludeDir.ImGui}",
+            "%{IncludeDir.glm}",
+            "%{prj.name}/src",
+            "%{prj.name}/vendor/spdlog/include"
+        }
+
+        links
+        {
+            "GLFW",
+            "Glad",
+            "ImGui"
         }
   
     filter "configurations:Debug"
@@ -121,18 +149,36 @@ project "Sandbox"
         "%{IncludeDir.glm}"
     }
 
-    links
-    {
-        "Hazel"
-    }
-
     filter "system:windows"
         staticruntime "On"
         systemversion "latest"
 
+        links
+        {
+            "Hazel"
+        }
+
         defines
         {
             "HZ_PLATFORM_WINDOWS"
+        }
+
+    filter "system:macosx"
+        sysincludedirs
+        {
+            "Hazel/vendor/spdlog/include",
+            "Hazel/src",
+            "Hazel/vendor",
+            "%{IncludeDir.glm}"
+        }
+
+        links
+        {
+            "Hazel",
+            "Cocoa.framework",
+            "IOKit.framework",
+            "CoreFoundation.framework",
+            "OpenGL.framework"
         }
 
     filter "configurations:Debug"
