@@ -1,7 +1,15 @@
 .vs/
 bin/
+!vendor/bin/
 bin-int/
 
+.DS_Store
 
 *.user
 imgui.ini
+
+*.xcworkspace/
+*.xcodeproj/
+
+*.vcxproj
+*.vcxproj.*
